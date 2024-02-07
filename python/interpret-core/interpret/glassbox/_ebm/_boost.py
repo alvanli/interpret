@@ -60,7 +60,7 @@ def boost(
 
             _log.info("Start boosting")
             native = Native.get_native_singleton()
-
+            nominals = native.extract_nominals(dataset)
             for episode_index in range(max_rounds):
                 if episode_index % 10 == 0:
                     _log.debug("Sweep Index {0}".format(episode_index))
@@ -70,16 +70,16 @@ def boost(
                     # we're doing a cyclic round
                     heap = []
 
-                term_boost_flags_local = term_boost_flags
-                if 0 < smoothing_rounds:
-                    # modify some of our parameters temporarily
-                    term_boost_flags_local |= Native.TermBoostFlags_RandomSplits
-
                 for term_idx in range(len(term_features)):
                     if 1.0 <= greedy_portion:
                         # we're being greedy, so select something from our
                         # queue and overwrite the term_idx we'll work on
                         _, term_idx = heapq.heappop(heap)
+
+                    term_boost_flags_local = term_boost_flags
+                    if 0 < smoothing_rounds and not any(nominals[i] for i in term_features[term_idx]):
+                        # modify some of our parameters temporarily
+                        term_boost_flags_local |= Native.TermBoostFlags_RandomSplits
 
                     avg_gain = booster.generate_term_update(
                         rng,
