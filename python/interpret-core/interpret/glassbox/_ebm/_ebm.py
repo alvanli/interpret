@@ -695,7 +695,7 @@ class EBMModel(BaseEstimator):
             feature_types_given=self.feature_types,
             max_bins_leveled=bin_levels,
             binning=binning,
-            min_samples_bin=1,
+            min_samples_bin=2,
             min_unique_continuous=min_unique_continuous,
             seed=seed,
             epsilon=bin_eps,

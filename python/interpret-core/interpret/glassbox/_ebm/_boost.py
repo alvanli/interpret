@@ -77,7 +77,7 @@ def boost(
                         _, term_idx = heapq.heappop(heap)
 
                     term_boost_flags_local = term_boost_flags
-                    if 0 < smoothing_rounds and not any(nominals[i] for i in term_features[term_idx]):
+                    if 0 < smoothing_rounds:  # and not any(nominals[i] for i in term_features[term_idx]):
                         # modify some of our parameters temporarily
                         term_boost_flags_local |= Native.TermBoostFlags_RandomSplits
 
